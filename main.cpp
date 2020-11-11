@@ -27,8 +27,12 @@ int main(int argc, char **argv) {
 
     bootSector bSector{};
     getImageChars(addr, bSector);
-    std::cout << "Root offset: " << bSector.sectorSize + bSector.reservedSec * bSector.sectorSize +
-                                    bSector.numFats * bSector.sizeFat * bSector.sectorSize << std::endl;
+    int rootOffset = bSector.sectorSize + bSector.reservedSec * bSector.sectorSize +
+                     bSector.numFats * bSector.sizeFat * bSector.sectorSize;
+
+    std::cout << "Root offset: " << rootOffset << std::endl;
+
+    getRootEntry(addr, bSector.rootNumEntries, rootOffset);
 
     return 0;
 }

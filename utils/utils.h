@@ -56,5 +56,6 @@ void readISO(void *addr, T &dest, int offset) {
 }
 
 bootSector getImageChars(void *addr, bootSector &bSector);
+void getRootEntry(void *addr, uint16_t rootNumEntries, int rootOffset);
 
 #endif //FAT16_UTILS_H
