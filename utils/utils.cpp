@@ -16,7 +16,8 @@ bootSector getImageChars(void *addr, bootSector &bSector) {
     std::cout << "Size of FAT in sectors: " << bSector.sizeFat << "; in bytes: " << bSector.sizeFat * bSector.sectorSize
               << std::endl;
 
-    std::cout << "Number of entries in root directory : " << bSector.sectorSize << std::endl;
+    std::cout << "Number of entries in root directory : " << bSector.rootNumEntries << std::endl << "; in bytes: " << bSector.rootNumEntries * bSector.sectorSize
+                                                                                                               << std::endl;
 
     std::cout << "Number of reserved sectors : " << bSector.reservedSec << std::endl;
 
