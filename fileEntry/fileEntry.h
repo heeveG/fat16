@@ -10,7 +10,21 @@
 
 #include <stdint.h>
 
-#pragma pack(1)
+#pragma pack(push, 1)
+
+struct bootSector {
+    uint8_t pad_1[11];
+    uint16_t sectorSize;
+    uint8_t secPerCluster;
+    uint16_t reservedSec;
+    uint8_t numFats;
+    uint16_t rootNumEntries;
+    uint8_t pad_2[3];
+    uint16_t sizeFat;
+    uint8_t pad_3[486];
+    uint16_t actualSign;
+    uint16_t correctSign = 0xaa55;
+};
 
 struct fatDirEntry {
     unsigned char name[FAT_FILENAME_LENGTH]; /* e.g. "README  " */

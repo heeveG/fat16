@@ -1,4 +1,5 @@
 #include "utils/utils.h"
+#include "fileEntry/fileEntry.h"
 
 int main(int argc, char **argv) {
     if (argc > 2) {
@@ -25,7 +26,7 @@ int main(int argc, char **argv) {
     }
     close(fd);
 
-    int rootOffset = getImageChars(addr);
+    bootSector bSector = getImageChars(addr);
     std::cout << "Root offset: " << rootOffset << std::endl;
 
     return 0;

@@ -3,8 +3,9 @@
 //
 
 #include "utils.h"
+#include "../fileEntry/fileEntry.h"
 
-int getImageChars(void *addr) {
+bootSector getImageChars(void *addr) {
     unsigned short sectorSize;
     readISO(addr, sectorSize, 11);
     std::cout << "Sector size : " << sectorSize << std::endl;
@@ -34,5 +35,5 @@ int getImageChars(void *addr) {
     std::string isCorrect = actualSign == correctSign ? " - correct" : " - invalid";
     std::cout << "Signature is : " << std::hex << actualSign << std::dec << isCorrect << std::endl;
 
-    return sectorSize + reservedSec * sectorSize + sizeFat * sectorSize;
+    return sectorSize + reservedSec * sectorSize + numFats * sizeFat * sectorSize;
 }
