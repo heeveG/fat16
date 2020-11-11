@@ -75,45 +75,34 @@ void fatReadFilename(char * output, struct fatDirEntry * de) {
     }
 }
 
-void printDirEntry(struct fatDirEntry * de) {
-    char filename[13]; /* "FILENAME.EXT\0" */
-//    struct fat_date date_created, date_modified, date_accessed;
-//    struct fat_time time_created, time_modified;
-    char * file_content;
+std::string readTime(uint16_t bitfield){
+    return std::to_string((bitfield & 0x1F) * 2) + ":" + std::to_string((bitfield >> 5) & 0x3F) + ":" + std::to_string((bitfield >> 11) & 0x1F);
+}
 
-    /* read filename */
+std::string readDate(uint16_t bitfield){
+    return std::to_string(bitfield & 0x1F) + "-" + std::to_string((bitfield >> 5) & 0x0F) + "-" + std::to_string( ((bitfield >> 9) & 0x7F) + 1980);
+}
+
+void printFileEntry(struct fatDirEntry * de) {
+    char filename[30];
     fatReadFilename(filename, de);
 
-    /* read dates and times from bitfields */
-//    fat_read_date(&date_created, de->create_date);
-//    fat_read_date(&date_modified, de->modify_date);
-//    fat_read_date(&date_accessed, de->access_date);
-//    fat_read_time(&time_created, de->create_time);
-//    fat_read_time(&time_modified, de->modify_time);
+    std::cout << "Name: " << filename << std::endl;
 
-    printf("  %s\n", filename);
-    printf("    bytes: %u  cluster: %u\n", de->size, de->start_cluster);
-//    printf("    created:  %4u-%02u-%02u %02u:%02u:%02u\n",
-//           date_created.year, date_created.month, date_created.day,
-//           time_created.hour, time_created.minute, time_created.second);
-//    printf("    modified: %4u-%02u-%02u %02u:%02u:%02u\n",
-//           date_modified.year, date_modified.month, date_modified.day,
-//           time_modified.hour, time_modified.minute, time_modified.second);
-//    printf("    accessed: %4u-%02u-%02u\n",
-//           date_accessed.year, date_accessed.month, date_accessed.day);
-    printf("   ");
-    printf(" ro:%s", de->attributes & 0x01 ? "yes" : "no");
-    printf(" hide:%s", de->attributes & 0x02 ? "yes" : "no");
-    printf(" sys:%s", de->attributes & 0x03 ? "yes" : "no");
-    printf(" dir:%s", de->attributes & 0x10 ? "yes" : "no");
-    printf(" arch:%s", de->attributes & 0x20 ? "yes" : "no");
-    putchar('\n');
+    auto entrySize = fatIsDir(de) ? "0 (Directory)" : std::to_string(de->size);
+    std::cout << "Size: " << entrySize << std::endl;
 
-//    if (fat_is_file(de)) {
-//        file_content = fat_read_file_from_dir_entry(fs, de);
-//        printf("    Content:\n%s    <EOF>\n", file_content);
-//        free(file_content);
-//    }
+    std::cout << "Created: " << readDate(de->create_date) + " " + readTime(de->create_time) << std::endl;
+
+    std::cout << "Last Modified: " << readDate(de->modify_date) + " " + readTime(de->modify_time) << std::endl;
+
+    std::cout << "Attributes:" << std::endl;
+    std::cout << "  Read-Only: " << (de->attributes & 0x01 ? "yes" : "no") << std::endl;
+    std::cout << "  Hidden: " << (de->attributes & 0x02 ? "yes" : "no") << std::endl;
+    std::cout << "  System: " << (de->attributes & 0x03 ? "yes" : "no") << std::endl;
+    std::cout << "  Directory: " << (de->attributes & 0x10 ? "yes" : "no") << std::endl;
+    std::cout << "  Archived: " << (de->attributes & 0x20 ? "yes" : "no") << std::endl << std::endl;
+
 }
 
 void getRootEntry(void *addr, uint16_t rootNumEntries, int rootOffset) {
@@ -122,13 +111,10 @@ void getRootEntry(void *addr, uint16_t rootNumEntries, int rootOffset) {
     for (int i = 0; i < rootNumEntries; ++i) {
         readISO(addr, entry, rootOffset + i * sizeof(fatDirEntry));
 
-        /* skip empty/unused entries */
         if (!fatDirEntryExists(&entry)) continue;
 
-        /* skip volume label */
         if (fatIsVolumeLabel(&entry)) continue;
-//        std::cout << entry.name << std::endl;
 
-        printDirEntry(&entry);
+        printFileEntry(&entry);
     }
 }
