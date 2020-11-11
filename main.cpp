@@ -12,22 +12,21 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-//    off_t sz = lseek(fd, 0, SEEK_END);
-//    if (sz == ((off_t) -1)) {
-//        std::cerr << "Error while seeking" << std::endl;
-//        exit(-1);
-//    }
+    off_t sz = lseek(fd, 0, SEEK_END);
+    if (sz == ((off_t) -1)) {
+        std::cerr << "Error while seeking" << std::endl;
+        exit(-1);
+    }
 
-    void *addr = mmap(nullptr, 512, PROT_READ, MAP_PRIVATE, fd, 0);
+    void *addr = mmap(nullptr, sz, PROT_READ, MAP_PRIVATE, fd, 0);
     if (!addr) {
         std::cerr << "Error while mapping" << std::endl;
         exit(-1);
     }
-    close(fd);
 
     bootSector bSector{};
     getImageChars(addr, bSector);
-    int rootOffset = bSector.sectorSize + bSector.reservedSec * bSector.sectorSize +
+    int rootOffset = bSector.reservedSec * bSector.sectorSize +
                      bSector.numFats * bSector.sizeFat * bSector.sectorSize;
 
     std::cout << "Root offset: " << rootOffset << std::endl;
