@@ -1,0 +1,3 @@
+/home/heeve/Documents/os/fs/fat16/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/heeve/Documents/os/fs/fat16/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/heeve/Documents/os/fs/fat16/cmake-build-debug/CMakeFiles/fat16.dir
