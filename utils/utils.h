@@ -19,4 +19,6 @@ void readISO(void *addr, T &dest, int offset) {
     memcpy(&dest, (char *) addr + offset, sizeof(T));
 }
 
+int getImageChars(void *addr);
+
 #endif //FAT16_UTILS_H

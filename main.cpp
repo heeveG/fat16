@@ -25,19 +25,8 @@ int main(int argc, char **argv) {
     }
     close(fd);
 
-    short sectorSize;
-    readISO(addr, sectorSize, 11);
-    std::cout << "Sector size : " << sectorSize << std::endl;
-
-    char secPerCluster;
-    readISO(addr, secPerCluster, 13);
-    std::cout << "Sectors per cluster " << (int)secPerCluster << std::endl;
-
-    short actualSign;
-    readISO(addr, actualSign, 510);
-    std::cout << "Signature is : " << std::hex << actualSign << std::dec << std::endl;
-
-
+    int rootOffset = getImageChars(addr);
+    std::cout << "Root offset: " << rootOffset << std::endl;
 
     return 0;
 }

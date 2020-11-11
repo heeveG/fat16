@@ -1,4 +1,0 @@
-/home/heeve/.local/share/JetBrains/Toolbox/apps/CLion/ch-0/202.6948.80/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/heeve/Documents/os/fs/fat16
--- Configuring done
--- Generating done
--- Build files have been written to: /home/heeve/Documents/os/fs/fat16/cmake-build-debug
