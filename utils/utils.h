@@ -12,12 +12,13 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <cstring>
+#include "../fileEntry/fileEntry.h"
 
 template<typename T>
 void readISO(void *addr, T &dest, int offset) {
     memcpy(&dest, (char *) addr + offset, sizeof(T));
 }
 
-bootSector getImageChars(void *addr);
+bootSector getImageChars(void *addr, bootSector &bSector);
 
 #endif //FAT16_UTILS_H

@@ -1,5 +1,4 @@
 #include "utils/utils.h"
-#include "fileEntry/fileEntry.h"
 
 int main(int argc, char **argv) {
     if (argc > 2) {
@@ -26,8 +25,10 @@ int main(int argc, char **argv) {
     }
     close(fd);
 
-    bootSector bSector = getImageChars(addr);
-    std::cout << "Root offset: " << rootOffset << std::endl;
+    bootSector bSector;
+    getImageChars(addr, bSector);
+    std::cout << "Root offset: " << bSector.sectorSize + bSector.reservedSec * bSector.sectorSize +
+                                    bSector.numFats * bSector.sizeFat * bSector.sectorSize << std::endl;
 
     return 0;
 }

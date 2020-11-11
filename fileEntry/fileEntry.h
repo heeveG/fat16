@@ -23,7 +23,6 @@ struct bootSector {
     uint16_t sizeFat;
     uint8_t pad_3[486];
     uint16_t actualSign;
-    uint16_t correctSign = 0xaa55;
 };
 
 struct fatDirEntry {

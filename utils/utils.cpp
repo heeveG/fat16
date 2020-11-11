@@ -3,37 +3,26 @@
 //
 
 #include "utils.h"
-#include "../fileEntry/fileEntry.h"
 
-bootSector getImageChars(void *addr) {
-    unsigned short sectorSize;
-    readISO(addr, sectorSize, 11);
-    std::cout << "Sector size : " << sectorSize << std::endl;
+bootSector getImageChars(void *addr, bootSector &bSector) {
+    readISO(addr, bSector, 0);
 
-    unsigned char secPerCluster;
-    readISO(addr, secPerCluster, 13);
-    std::cout << "Sectors per cluster " << (int) secPerCluster << std::endl;
+    std::cout << "Sector size : " << bSector.sectorSize << std::endl;
 
-    unsigned char numFats;
-    readISO(addr, numFats, 16);
-    std::cout << "Number of FATS : " << (int) numFats << std::endl;
+    std::cout << "Sectors per cluster " << (int) bSector.secPerCluster << std::endl;
 
-    unsigned short sizeFat;
-    readISO(addr, sizeFat, 22);
-    std::cout << "Size of FAT in sectors: " << sizeFat << "; in bytes: " << sizeFat * sectorSize << std::endl;
+    std::cout << "Number of FATS : " << (int) bSector.numFats << std::endl;
 
-    unsigned short rootNumEntries;
-    readISO(addr, rootNumEntries, 17);
-    std::cout << "Number of entries in root directory : " << sectorSize << std::endl;
+    std::cout << "Size of FAT in sectors: " << bSector.sizeFat << "; in bytes: " << bSector.sizeFat * bSector.sectorSize
+              << std::endl;
 
-    unsigned short reservedSec;
-    readISO(addr, reservedSec, 14);
-    std::cout << "Number of reserved sectors : " << reservedSec << std::endl;
+    std::cout << "Number of entries in root directory : " << bSector.sectorSize << std::endl;
 
-    unsigned short correctSign = 0xaa55, actualSign;
-    readISO(addr, actualSign, 510);
-    std::string isCorrect = actualSign == correctSign ? " - correct" : " - invalid";
-    std::cout << "Signature is : " << std::hex << actualSign << std::dec << isCorrect << std::endl;
+    std::cout << "Number of reserved sectors : " << bSector.reservedSec << std::endl;
 
-    return sectorSize + reservedSec * sectorSize + numFats * sizeFat * sectorSize;
+    uint16_t correctSign = 0xaa55;
+    std::string isCorrect = bSector.actualSign == correctSign ? " - correct" : " - invalid";
+    std::cout << "Signature is : " << std::hex << bSector.actualSign << std::dec << isCorrect << std::endl;
+
+    return bSector;
 }
