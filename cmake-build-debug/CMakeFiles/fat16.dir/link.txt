@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/fat16.dir/main.cpp.o CMakeFiles/fat16.dir/utils/utils.cpp.o  -o fat16 
